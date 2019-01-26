@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	. "github.com/cloudfoundry-incubator/switchboard/config"
+	. "github.com/pivotal/lts-switchboard/config"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -70,6 +70,16 @@ var _ = Describe("Config", func() {
 
 		It("does not return an error if API.ForceHttps is blank", func() {
 			err := test_helpers.IsOptionalField(rootConfig, "API.ForceHttps")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("does not return an error if ConsulCluster is blank", func() {
+			err := test_helpers.IsOptionalField(rootConfig, "ConsulCluster")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("does not return an error if ConsulServiceName is blank", func() {
+			err := test_helpers.IsOptionalField(rootConfig, "ConsulServiceName")
 			Expect(err).ToNot(HaveOccurred())
 		})
 

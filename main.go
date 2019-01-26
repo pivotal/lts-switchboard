@@ -7,17 +7,22 @@ import (
 	"os"
 	"strconv"
 
+	"code.cloudfoundry.org/clock"
+	"code.cloudfoundry.org/consuladapter"
 	"code.cloudfoundry.org/lager"
+	"code.cloudfoundry.org/locket"
 
-	"github.com/cloudfoundry-incubator/switchboard/api"
-	"github.com/cloudfoundry-incubator/switchboard/apiaggregator"
-	"github.com/cloudfoundry-incubator/switchboard/config"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
-	apirunner "github.com/cloudfoundry-incubator/switchboard/runner/api"
-	apiaggregatorrunner "github.com/cloudfoundry-incubator/switchboard/runner/apiaggregator"
-	"github.com/cloudfoundry-incubator/switchboard/runner/bridge"
-	"github.com/cloudfoundry-incubator/switchboard/runner/health"
-	"github.com/cloudfoundry-incubator/switchboard/runner/monitor"
+	apirunner "github.com/pivotal/lts-switchboard/runner/api"
+	apiaggregatorrunner "github.com/pivotal/lts-switchboard/runner/apiaggregator"
+
+	consulapi "github.com/hashicorp/consul/api"
+	"github.com/pivotal/lts-switchboard/api"
+	"github.com/pivotal/lts-switchboard/apiaggregator"
+	"github.com/pivotal/lts-switchboard/config"
+	"github.com/pivotal/lts-switchboard/domain"
+	"github.com/pivotal/lts-switchboard/runner/bridge"
+	"github.com/pivotal/lts-switchboard/runner/health"
+	"github.com/pivotal/lts-switchboard/runner/monitor"
 	"github.com/tedsuo/ifrit"
 	"github.com/tedsuo/ifrit/grouper"
 	"github.com/tedsuo/ifrit/sigmon"
@@ -84,29 +89,28 @@ func main() {
 		})
 	}
 
-	if rootConfig.Proxy.InactiveMysqlPort != 0 {
-		inactiveNodeClusterMonitor := monitor.NewClusterMonitor(
-			backends,
-			rootConfig.Proxy.HealthcheckTimeout(),
-			logger,
-			false,
-		)
+	if rootConfig.ConsulCluster != "" {
+		writePid(logger, rootConfig.PidFile)
 
-		inactiveNodeBridgeRunner := bridge.NewRunner(rootConfig.Proxy.InactiveMysqlPort, rootConfig.Proxy.ShutdownDelay(), logger)
+		if rootConfig.ConsulServiceName == "" {
+			rootConfig.ConsulServiceName = "mysql"
+		}
 
-		inactiveNodeClusterMonitor.RegisterBackendSubscriber(inactiveNodeBridgeRunner.ActiveBackendChan)
-		clusterStateManager.RegisterTrafficEnabledChan(inactiveNodeBridgeRunner.TrafficEnabledChan)
+		clock := clock.NewClock()
+		consulClient, err := consuladapter.NewClientFromUrl(rootConfig.ConsulCluster)
+		if err != nil {
+			logger.Fatal("new-consul-client-failed", err)
+		}
 
-		members = append(members,
-			grouper.Member{
-				Name:   "inactive-node-bridge",
-				Runner: inactiveNodeBridgeRunner,
+		registrationRunner := locket.NewRegistrationRunner(logger,
+			&consulapi.AgentServiceRegistration{
+				Name:  rootConfig.ConsulServiceName,
+				Port:  int(rootConfig.Proxy.Port),
+				Check: &consulapi.AgentServiceCheck{TTL: "3s"},
 			},
-			grouper.Member{
-				Name:   "inactive-node-monitor",
-				Runner: monitor.NewRunner(inactiveNodeClusterMonitor, logger),
-			},
-		)
+			consulClient, locket.RetryInterval, clock)
+
+		members = append(members, grouper.Member{"registration", registrationRunner})
 	}
 
 	group := grouper.NewOrdered(os.Interrupt, members)
@@ -114,7 +118,9 @@ func main() {
 
 	logger.Info("Proxy started", lager.Data{"proxyConfig": rootConfig.Proxy})
 
-	writePid(logger, rootConfig.PidFile)
+	if rootConfig.ConsulCluster == "" {
+		writePid(logger, rootConfig.PidFile)
+	}
 
 	err = <-process.Wait()
 	if err != nil {
