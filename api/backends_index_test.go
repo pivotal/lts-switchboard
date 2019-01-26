@@ -3,9 +3,9 @@ package api_test
 import (
 	"code.cloudfoundry.org/lager"
 	"code.cloudfoundry.org/lager/lagertest"
-	"github.com/cloudfoundry-incubator/switchboard/api"
-	"github.com/cloudfoundry-incubator/switchboard/api/apifakes"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
+	"github.com/pivotal/lts-switchboard/api"
+	"github.com/pivotal/lts-switchboard/api/apifakes"
+	"github.com/pivotal/lts-switchboard/domain"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

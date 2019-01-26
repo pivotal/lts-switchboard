@@ -2,7 +2,7 @@ package domain
 
 import (
 	"code.cloudfoundry.org/lager"
-	"github.com/cloudfoundry-incubator/switchboard/config"
+	"github.com/pivotal/lts-switchboard/config"
 )
 
 var BackendProvider = NewBackend

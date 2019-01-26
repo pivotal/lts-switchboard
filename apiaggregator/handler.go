@@ -6,8 +6,8 @@ import (
 	"html/template"
 
 	"code.cloudfoundry.org/lager"
-	"github.com/cloudfoundry-incubator/switchboard/api/middleware"
-	"github.com/cloudfoundry-incubator/switchboard/config"
+	"github.com/pivotal/lts-switchboard/api/middleware"
+	"github.com/pivotal/lts-switchboard/config"
 
 	"bytes"
 	"fmt"

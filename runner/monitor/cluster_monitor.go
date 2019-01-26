@@ -13,7 +13,7 @@ import (
 
 	"code.cloudfoundry.org/lager"
 	"github.com/cloudfoundry-incubator/galera-healthcheck/api"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
+	"github.com/pivotal/lts-switchboard/domain"
 )
 
 //go:generate counterfeiter . UrlGetter

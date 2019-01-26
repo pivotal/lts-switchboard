@@ -5,7 +5,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/cloudfoundry-incubator/switchboard/runner/api"
+	"github.com/pivotal/lts-switchboard/runner/api"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

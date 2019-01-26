@@ -15,9 +15,9 @@ import (
 	"sync"
 
 	"code.cloudfoundry.org/lager/lagertest"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
-	"github.com/cloudfoundry-incubator/switchboard/runner/monitor"
-	"github.com/cloudfoundry-incubator/switchboard/runner/monitor/monitorfakes"
+	"github.com/pivotal/lts-switchboard/domain"
+	"github.com/pivotal/lts-switchboard/runner/monitor"
+	"github.com/pivotal/lts-switchboard/runner/monitor/monitorfakes"
 )
 
 const healthcheckTimeout = 500 * time.Millisecond

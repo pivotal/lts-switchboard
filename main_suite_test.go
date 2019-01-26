@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	switchboardPackage = "github.com/cloudfoundry-incubator/switchboard/"
+	switchboardPackage = "github.com/pivotal/lts-switchboard/"
 )
 
 func TestSwitchboard(t *testing.T) {

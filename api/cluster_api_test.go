@@ -8,8 +8,8 @@ import (
 
 	"code.cloudfoundry.org/lager"
 	"code.cloudfoundry.org/lager/lagertest"
-	"github.com/cloudfoundry-incubator/switchboard/api"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
+	"github.com/pivotal/lts-switchboard/api"
+	"github.com/pivotal/lts-switchboard/domain"
 )
 
 var _ = Describe("ClusterAPI", func() {

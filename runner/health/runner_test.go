@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/cloudfoundry-incubator/switchboard/runner/health"
+	"github.com/pivotal/lts-switchboard/runner/health"
 
 	"net/http"
 

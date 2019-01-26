@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/cloudfoundry-incubator/switchboard/api/middleware"
-	"github.com/cloudfoundry-incubator/switchboard/api/middleware/fakes"
+	"github.com/pivotal/lts-switchboard/api/middleware"
+	"github.com/pivotal/lts-switchboard/api/middleware/fakes"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

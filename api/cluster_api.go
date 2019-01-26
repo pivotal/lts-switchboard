@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"code.cloudfoundry.org/lager"
-	"github.com/cloudfoundry-incubator/switchboard/domain"
+	"github.com/pivotal/lts-switchboard/domain"
 )
 
 type ClusterAPI struct {

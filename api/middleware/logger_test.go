@@ -5,10 +5,10 @@ import (
 
 	"code.cloudfoundry.org/lager"
 	"code.cloudfoundry.org/lager/lagertest"
-	"github.com/cloudfoundry-incubator/switchboard/api/apifakes"
+	"github.com/pivotal/lts-switchboard/api/apifakes"
 
-	"github.com/cloudfoundry-incubator/switchboard/api/middleware"
-	"github.com/cloudfoundry-incubator/switchboard/api/middleware/fakes"
+	"github.com/pivotal/lts-switchboard/api/middleware"
+	"github.com/pivotal/lts-switchboard/api/middleware/fakes"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

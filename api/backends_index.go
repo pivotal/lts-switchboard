@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/cloudfoundry-incubator/switchboard/domain"
+	"github.com/pivotal/lts-switchboard/domain"
 )
 
 var BackendsIndex = func(backends []*domain.Backend, clusterManager ClusterManager) http.Handler {

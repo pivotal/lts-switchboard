@@ -8,7 +8,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/cloudfoundry-incubator/switchboard/config"
+	"github.com/pivotal/lts-switchboard/config"
 	"github.com/onsi/ginkgo"
 )
 
