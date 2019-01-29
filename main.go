@@ -113,6 +113,31 @@ func main() {
 		members = append(members, grouper.Member{"registration", registrationRunner})
 	}
 
+	if rootConfig.Proxy.InactiveMysqlPort != 0 {
+		inactiveNodeClusterMonitor := monitor.NewClusterMonitor(
+			backends,
+			rootConfig.Proxy.HealthcheckTimeout(),
+			logger,
+			false,
+		)
+
+		inactiveNodeBridgeRunner := bridge.NewRunner(rootConfig.Proxy.InactiveMysqlPort, rootConfig.Proxy.ShutdownDelay(), logger)
+
+		inactiveNodeClusterMonitor.RegisterBackendSubscriber(inactiveNodeBridgeRunner.ActiveBackendChan)
+		clusterStateManager.RegisterTrafficEnabledChan(inactiveNodeBridgeRunner.TrafficEnabledChan)
+
+		members = append(members,
+			grouper.Member{
+				Name:   "inactive-node-bridge",
+				Runner: inactiveNodeBridgeRunner,
+			},
+			grouper.Member{
+				Name:   "inactive-node-monitor",
+				Runner: monitor.NewRunner(inactiveNodeClusterMonitor, logger),
+			},
+		)
+	}
+
 	group := grouper.NewOrdered(os.Interrupt, members)
 	process := ifrit.Invoke(sigmon.New(group))
 
