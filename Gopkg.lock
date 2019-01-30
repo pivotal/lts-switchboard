@@ -32,7 +32,10 @@
   branch = "master"
   digest = "1:2748e76aff604db12e8687a843c9e2b795e3c34ceb77f829409ac9c14bacc439"
   name = "code.cloudfoundry.org/consuladapter"
-  packages = ["."]
+  packages = [
+    ".",
+    "consulrunner",
+  ]
   pruneopts = ""
   revision = "c6d9ccbe0f83c7f3052e8304918f1107d321a39a"
 
@@ -148,12 +151,12 @@
   version = "v1.1.0"
 
 [[projects]]
-  digest = "1:4f6fa28e70849794d77ee05d6824e1bff34be214861f20bed81d928ff99d043d"
+  digest = "1:89c393019afe6c213c9b76eab2ff8b46b0c8a24385e29aa2084622e9366f1bad"
   name = "github.com/hashicorp/consul"
   packages = ["api"]
   pruneopts = ""
-  revision = "65d2c9b51d02e6b14db3da3cb8424ef72e046780"
-  version = "v1.4.1"
+  revision = "40f243a5dab63b5265fe9014b8b3c4b7c3e7e053"
+  version = "v0.9.4"
 
 [[projects]]
   digest = "1:05334858a0cfb538622a066e065287f63f42bee26a7fda93a789674225057201"
@@ -210,14 +213,6 @@
   pruneopts = ""
   revision = "ae18d6b8b3205b561c79e8e5f69bff09736185f4"
   version = "v1.0.0"
-
-[[projects]]
-  digest = "1:bcc46a0fbd9e933087bef394871256b5c60269575bb661935874729c65bbbf60"
-  name = "github.com/mitchellh/mapstructure"
-  packages = ["."]
-  pruneopts = ""
-  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
-  version = "v1.1.2"
 
 [[projects]]
   branch = "master"
@@ -444,12 +439,14 @@
     "code.cloudfoundry.org/cflager",
     "code.cloudfoundry.org/clock",
     "code.cloudfoundry.org/consuladapter",
+    "code.cloudfoundry.org/consuladapter/consulrunner",
     "code.cloudfoundry.org/lager",
     "code.cloudfoundry.org/lager/lagertest",
     "code.cloudfoundry.org/locket",
     "github.com/cloudfoundry-incubator/galera-healthcheck/api",
     "github.com/hashicorp/consul/api",
     "github.com/onsi/ginkgo",
+    "github.com/onsi/ginkgo/config",
     "github.com/onsi/gomega",
     "github.com/onsi/gomega/gexec",
     "github.com/onsi/gomega/ghttp",

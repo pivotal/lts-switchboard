@@ -52,3 +52,7 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/validator.v2"
+
+[[constraint]]
+  name = "github.com/hashicorp/consul"
+  version = "0.9.3"
