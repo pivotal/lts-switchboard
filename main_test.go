@@ -1138,7 +1138,6 @@ var _ = Describe("Switchboard", func() {
 		})
 
 		It("registers itself with consul", func() {
-			mySlice := []string{}
 			Eventually(func() map[string]*consulapi.AgentService {
 				services, _ := consulClient.Agent().Services()
 				return services
@@ -1147,7 +1146,7 @@ var _ = Describe("Switchboard", func() {
 					Service: "test_mysql",
 					ID:      "test_mysql",
 					Port:    int(proxyPort),
-					Tags:    mySlice,
+					Tags:    nil,
 				}))
 		})
 	})
