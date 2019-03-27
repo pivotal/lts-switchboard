@@ -19,13 +19,13 @@ import (
 	"code.cloudfoundry.org/consuladapter/consulrunner"
 
 	consulapi "github.com/hashicorp/consul/api"
-	"github.com/pivotal/lts-switchboard/api"
-	"github.com/pivotal/lts-switchboard/config"
-	"github.com/pivotal/lts-switchboard/dummies"
 	. "github.com/onsi/ginkgo"
 	ginkgoconf "github.com/onsi/ginkgo/config"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/types"
+	"github.com/pivotal/lts-switchboard/api"
+	"github.com/pivotal/lts-switchboard/config"
+	"github.com/pivotal/lts-switchboard/dummies"
 	"github.com/tedsuo/ifrit"
 	"github.com/tedsuo/ifrit/ginkgomon"
 	"github.com/tedsuo/ifrit/grouper"
@@ -196,8 +196,8 @@ var _ = Describe("Switchboard", func() {
 		proxyConfig = config.Proxy{
 			Backends:                 backends,
 			HealthcheckTimeoutMillis: 500,
-			Port:              proxyPort,
-			InactiveMysqlPort: proxyInactiveNodePort,
+			Port:                     proxyPort,
+			InactiveMysqlPort:        proxyInactiveNodePort,
 		}
 
 		apiConfig = config.API{
@@ -835,8 +835,18 @@ var _ = Describe("Switchboard", func() {
 				})
 
 				Context("when connecting to the inactive port", func() {
-					Context("when there are multiple concurrent clients", func() {
+					JustBeforeEach(func() {
+						Eventually(func() error {
+							conn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", proxyInactiveNodePort))
+							if err != nil {
+								return err
+							}
+							_, err = sendData(conn, "checking inactive port is ready")
+							return err
+						}, startupTimeout).ShouldNot(HaveOccurred(), "Switchboard inactive mysql port never became ready")
+					})
 
+					Context("when there are multiple concurrent clients", func() {
 						It("proxies all the connections to the highest indexed backend", func() {
 							var doneArray = make([]chan interface{}, 3)
 							var dataMessages = make([]Response, 3)
@@ -1103,13 +1113,13 @@ var _ = Describe("Switchboard", func() {
 		)
 
 		BeforeEach(func() {
-			consulConfig := consulrunner.ClusterRunnerConfig {
-				StartingPort : 9001+ginkgoconf.GinkgoConfig.ParallelNode*consulrunner.PortOffsetLength,
-				NumNodes     : 1,
-				Scheme       : "http",
-				CACert       : "",
-				ClientCert   : "",
-				ClientKey    : "",
+			consulConfig := consulrunner.ClusterRunnerConfig{
+				StartingPort: 9001 + ginkgoconf.GinkgoConfig.ParallelNode*consulrunner.PortOffsetLength,
+				NumNodes:     1,
+				Scheme:       "http",
+				CACert:       "",
+				ClientCert:   "",
+				ClientKey:    "",
 			}
 
 			consulRunner = consulrunner.NewClusterRunner(consulConfig)
